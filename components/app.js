@@ -7,7 +7,7 @@ import Ozz from './Ozz/Ozz';
 window.webchat= function(color, title){
     render(
         <MuiThemeProvider>
-            <Ozz color={color} title={title}/>
+            <Ozz color={color} title={title} style={"1"}/>
         </MuiThemeProvider>
         ,document.getElementById('webchat_client'));
 }

@@ -4,6 +4,7 @@ import {Motion, spring} from 'react-motion';
 import $ from 'jquery';
 
 import Button from './Button';
+import DrawButton from './Drawer';
 import OzzBase from './OzzBase';
 
 class Ozz extends React.Component{
@@ -12,10 +13,7 @@ class Ozz extends React.Component{
 
         this.state = {
             active: false,
-            hasTriggered: false,
-            config: props.config,
-            color: props.color,
-            title: props.title
+            hasTriggered: false
         };
 
         this._handleClick = this._handleClick.bind(this);
@@ -48,17 +46,21 @@ class Ozz extends React.Component{
 
 
     render(){
-        const {active, color, title} = this.state;
-
+        const {active} = this.state;
+        const {color, title, style} = this.props;
         return(
             <div>
                 <div className="ozz" id="ozz">
                     {active ? <OzzBase active={active} color={color} title={title}/>:null}
-                    <Button 
+                    {style == "0" ? 
+                        <Button 
                         active={active}
                         onClick={this._handleClick}
                         color={color}
-                    />
+                        />
+                        :
+                        <DrawButton color={color} title={title}/>
+                    }
                 </div>
             </div>
         )
