@@ -47,20 +47,6 @@ class OzzBase extends React.Component{
         this.setState({
             height: height - (height * 0.2),
         });
-
-        var that = this;
-        axios.get('/islogged')
-            .then(function (response) {
-                var data = response.data;
-                if (data['logged'] == true){
-                    that.setState({authenticated:true,projects:data['projects'],email:data['email']})
-                }else{
-                    that.setState({authenticated:false})
-                }
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
     }
 
     _handleRest(){
@@ -70,7 +56,7 @@ class OzzBase extends React.Component{
     }
 
     render(){
-        const { active, config } = this.props;
+        const { active, color, title } = this.props;
         const { stable } = this.state;
         return (
             <Motion
@@ -95,7 +81,7 @@ class OzzBase extends React.Component{
                         bottom: '120px',
                         background: '#FFF',
                         border: '0.5px solid #58488A',
-                        width: '1000px',
+                        width: '400px',
                         borderRadius: '8px',
                         boxDhadow: '0 5px 40px rgba(0, 0, 0, 0.16)',
                         overflow: 'hidden',
@@ -104,8 +90,8 @@ class OzzBase extends React.Component{
                         flexDirection: 'column'
                     }}
                 >
-                    <OzzHeader active={active} rest={stable} config={config}/>
-                    {this.state.authenticated? <Main logout={this.logout} projects={this.state.projects} email={this.state.email}/>:<Login/>}
+                    <OzzHeader active={active} rest={stable} color={color} title={title}/>
+                    <Main/>
                 </div>
             }
             </Motion>

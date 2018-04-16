@@ -7,8 +7,6 @@ import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 
-import TabShift from './TabShift';
-
 import jQuery from 'jquery';
 
 class Main extends React.Component{
@@ -20,7 +18,7 @@ class Main extends React.Component{
         return(
             <div>
                 <div>
-                    <TabShift projects={this.props.projects} email={this.props.email} logout={this.props.logout}/>
+                    Todo
                 </div>
             </div>
         )

@@ -7,7 +7,7 @@ const presets = {
   default: { stiffness: 330, damping: 20 },
 };
 
-const OzzHeader = ({ active, rest, config }) => (
+const OzzHeader = ({ active, rest, color, title }) => (
   <Motion
     defaultStyle={{
       y: 40,
@@ -24,11 +24,11 @@ const OzzHeader = ({ active, rest, config }) => (
           transform: `translate(${interpolatingStyles.height}px)`,
           textAlign: 'center',
           color:'white',
-          background:config.color
+          background:color
         }}
       >
       <br/>
-      <span style={{"marginBottom":"30%"}}>Roverside Analytics Bot</span>
+      <span style={{"marginBottom":"30%"}}>{title}</span>
       </header>
     }
   </Motion>
