@@ -4,10 +4,10 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import Ozz from './Ozz/Ozz';
 
-window.webchat= function(color, title){
+window.webchat= function(color, title, style){
     render(
         <MuiThemeProvider>
-            <Ozz color={color} title={title} style={"1"}/>
+            <Ozz color={color} title={title} style={style}/>
         </MuiThemeProvider>
         ,document.getElementById('webchat_client'));
 }

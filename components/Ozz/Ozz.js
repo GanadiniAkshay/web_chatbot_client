@@ -52,7 +52,7 @@ class Ozz extends React.Component{
             <div>
                 <div className="ozz" id="ozz">
                     {active ? <OzzBase active={active} color={color} title={title}/>:null}
-                    {style == "0" ? 
+                    {style == 0 ? 
                         <Button 
                         active={active}
                         onClick={this._handleClick}
