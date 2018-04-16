@@ -25,5 +25,6 @@ All bug fixes, feature additions and documentation changes are welcome as contri
 ### License
 MIT License
 
+> Attribution is not required but will be appreciated.
 
 
