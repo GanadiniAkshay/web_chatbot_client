@@ -1,7 +1,11 @@
 import React from 'react';
 import {Motion, spring} from 'react-motion';
 
+import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
+import IconButton from 'material-ui/IconButton';
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import FlatButton from 'material-ui/FlatButton';
 
 const presets = {
   default: { stiffness: 330, damping: 20 },
@@ -17,19 +21,12 @@ const OzzHeader = ({ active, rest, color, title }) => (
     }}
   >
     {interpolatingStyles =>
-      <header
-        className="ozz-header"
-        style={{
-          height: interpolatingStyles.y,
-          transform: `translate(${interpolatingStyles.height}px)`,
-          textAlign: 'center',
-          color:'white',
-          background:color
-        }}
-      >
-      <br/>
-      <span style={{"marginBottom":"30%"}}>{title}</span>
-      </header>
+      <AppBar
+        title={<span>{title}</span>}
+        style={{backgroundColor: color}}
+        showMenuIconButton={false}
+        titleStyle={{textAlign:"center"}}
+      />
     }
   </Motion>
 );

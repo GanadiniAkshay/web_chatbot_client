@@ -4,11 +4,20 @@ import classNames from 'classnames';
 import Drawer from 'material-ui/Drawer';
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
+import IconButton from 'material-ui/IconButton';
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import FlatButton from 'material-ui/FlatButton';
 
 
 const cx = classNames;
 const presets = {
     default: { stiffness: 330, damping: 20 }
+};
+
+const styles = {
+    title: {
+      cursor: 'pointer',
+    },
 };
 
 class DrawButton extends React.Component {
@@ -73,8 +82,14 @@ class DrawButton extends React.Component {
                     />
                 }
                 </Motion>
-                <Drawer width={200} openSecondary={true} open={this.state.open} >
-                <AppBar title={title} />
+                <Drawer width={400} openSecondary={true} open={this.state.open} >
+                <AppBar
+                    title={<span style={styles.title}>{title}</span>}
+                    iconElementLeft={<IconButton><NavigationClose /></IconButton>}
+                    onLeftIconButtonClick={this.handleToggle}
+                    style={{backgroundColor: color}}
+                    titleStyle={{textAlign:"center"}}
+                />
                 </Drawer>
             </div>
         )
