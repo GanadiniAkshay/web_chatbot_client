@@ -68,8 +68,14 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
         <script type="text/javascript" src="./dist/webchat_client.js"></script>
         <script type="text/javascript">
+            var config = {
+                color:"black",
+                title:"The Amaze",
+                style:1,
+                buttonOpen:"help"
+            }
             $(document).ready(function(){
-                webchat('red','The Amazing Bot',1);
+                webchat(config);
             })
         </script>
         <!-- Place this tag in your head or just before your close body tag. -->

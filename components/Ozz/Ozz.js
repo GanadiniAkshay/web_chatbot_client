@@ -4,7 +4,7 @@ import {Motion, spring} from 'react-motion';
 import $ from 'jquery';
 
 import Button from './Button';
-import DrawButton from './Drawer';
+import DrawButton from './DrawButton';
 import OzzBase from './OzzBase';
 
 class Ozz extends React.Component{
@@ -17,6 +17,7 @@ class Ozz extends React.Component{
         };
 
         this._handleClick = this._handleClick.bind(this);
+        this.sendMessage  = this.sendMessage.bind(this);
     }
 
     componentDidMount(){
@@ -44,22 +45,29 @@ class Ozz extends React.Component{
         });
     }
 
+    sendMessage(){
+        var message = document.getElementById("message-bar").value;
+        document.getElementById("message-bar").value = "";
+        console.log("sent " + message);
+    }
+
 
     render(){
         const {active} = this.state;
-        const {color, title, style} = this.props;
+        const {color, title, style, buttonOpen} = this.props.config;
         return(
             <div>
                 <div className="ozz" id="ozz">
-                    {active ? <OzzBase active={active} color={color} title={title}/>:null}
+                    {active ? <OzzBase active={active} color={color} title={title} sendMessage={this.sendMessage}/>:null}
                     {style == 0 ? 
                         <Button 
                         active={active}
                         onClick={this._handleClick}
                         color={color}
+                        buttonOpen={buttonOpen}
                         />
                         :
-                        <DrawButton color={color} title={title}/>
+                        <DrawButton color={color} title={title} sendMessage={this.sendMessage} buttonOpen={buttonOpen}/>
                     }
                 </div>
             </div>

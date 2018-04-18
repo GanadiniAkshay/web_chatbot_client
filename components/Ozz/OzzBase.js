@@ -6,6 +6,7 @@ import axios from 'axios';
 import jQuery from 'jquery';
 
 import OzzHeader from './OzzHeader';
+import OzzFooter from './OzzFooter';
 import Login from './Login';
 import Main from './Main';
 
@@ -27,18 +28,6 @@ class OzzBase extends React.Component{
         }
 
         this._handleRest = this._handleRest.bind(this);
-        this.logout = this.logout.bind(this);
-    }
-
-    logout(){
-        var that = this;
-        axios.get('/logoutwin')
-            .then(function (response) {
-                that.setState({"authenticated":false});
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
     }
 
     componentDidMount(){
@@ -91,6 +80,7 @@ class OzzBase extends React.Component{
                     }}
                 >
                     <OzzHeader active={active} rest={stable} color={color} title={title}/>
+                    <OzzFooter convoId={"123"} token={"123"} color={color} sendMessage={this.props.sendMessage}/>
                     <Main/>
                 </div>
             }

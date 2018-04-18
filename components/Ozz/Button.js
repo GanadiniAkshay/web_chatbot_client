@@ -36,7 +36,7 @@ class Button extends React.Component {
     }
 
     render(){
-        const {active, className, count, onClick, color} = this.props;
+        const {active, className, count, onClick, color, buttonOpen} = this.props;
         const {stable} = this.state;
 
         let classes = cx({
@@ -58,7 +58,7 @@ class Button extends React.Component {
             >
             {interpolatingStyles =>
                 <RaisedButton 
-                    label={active?"Close":"Chatbot"}
+                    label={active?"Close":buttonOpen}
                     labelColor="#ffffff"
                     backgroundColor={color}
                     onClick={onClick}

@@ -8,6 +8,7 @@ import IconButton from 'material-ui/IconButton';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import FlatButton from 'material-ui/FlatButton';
 
+import OzzFooter from './OzzFooter';
 
 const cx = classNames;
 const presets = {
@@ -39,7 +40,7 @@ class DrawButton extends React.Component {
     }
 
     render(){
-        const {title, color} = this.props;
+        const {title, color, sendMessage, buttonOpen} = this.props;
         return(
             <div>
                 <Motion
@@ -55,7 +56,7 @@ class DrawButton extends React.Component {
                 >
                 {interpolatingStyles =>
                     <RaisedButton
-                    label="Open"
+                    label={buttonOpen}
                     labelColor="#ffffff"
                     backgroundColor={color}
                     onClick={this.handleToggle}
@@ -90,6 +91,7 @@ class DrawButton extends React.Component {
                     style={{backgroundColor: color}}
                     titleStyle={{textAlign:"center"}}
                 />
+                <OzzFooter convoId={"123"} token={"123"} color={color} sendMessage={sendMessage}/>
                 </Drawer>
             </div>
         )
