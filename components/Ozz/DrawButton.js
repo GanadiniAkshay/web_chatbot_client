@@ -9,6 +9,7 @@ import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import FlatButton from 'material-ui/FlatButton';
 
 import OzzFooter from './OzzFooter';
+import ChatList  from './ChatList';
 
 const cx = classNames;
 const presets = {
@@ -91,6 +92,7 @@ class DrawButton extends React.Component {
                     style={{backgroundColor: color}}
                     titleStyle={{textAlign:"center"}}
                 />
+                <ChatList color={color}/>
                 <OzzFooter convoId={"123"} token={"123"} color={color} sendMessage={sendMessage}/>
                 </Drawer>
             </div>

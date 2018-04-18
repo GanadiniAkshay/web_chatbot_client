@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Webchat | Plugin</title>
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <h3>
+                    <a href="/">
+                        Web Chatbot Client
+                    </a>
+            </h3>
+            <h5>Bot Backend: Microsoft Bot Framework</h5>
+            <h5>Chat Window Style: Popup</h5>
+            <!-- Place this tag where you want the button to render. -->
+            <a class="github-button" href="https://github.com/GanadiniAkshay/web_chatbot_client" data-icon="octicon-star" data-size="large" aria-label="Star ntkme/github-buttons on GitHub">Star</a>
+            <!-- Place this tag where you want the button to render. -->
+            <a class="github-button" href="https://github.com/GanadiniAkshay/web_chatbot_client/fork" data-icon="octicon-repo-forked" data-size="large" aria-label="Fork ntkme/github-buttons on GitHub">Fork</a>
+            <div id="webchat_client"></div>
+        </div>
+        <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+        <script type="text/javascript" src="./dist/webchat_client.js"></script>
+        <script type="text/javascript">
+            var config = {
+                color:"black",
+                title:"The Amaze",
+                style:0,
+                buttonOpen:"help"
+            }
+            $(document).ready(function(){
+                webchat(config);
+            })
+        </script>
+        <!-- Place this tag in your head or just before your close body tag. -->
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
+    </body>
+</html>

@@ -6,9 +6,8 @@ import axios from 'axios';
 import jQuery from 'jquery';
 
 import OzzHeader from './OzzHeader';
+import ChatList  from './ChatList';
 import OzzFooter from './OzzFooter';
-import Login from './Login';
-import Main from './Main';
 
 const presets = {
     default: {stiffness: 330, damping: 20},
@@ -80,8 +79,8 @@ class OzzBase extends React.Component{
                     }}
                 >
                     <OzzHeader active={active} rest={stable} color={color} title={title}/>
+                    <ChatList color={color}/>
                     <OzzFooter convoId={"123"} token={"123"} color={color} sendMessage={this.props.sendMessage}/>
-                    <Main/>
                 </div>
             }
             </Motion>
