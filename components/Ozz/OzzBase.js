@@ -44,8 +44,9 @@ class OzzBase extends React.Component{
     }
 
     render(){
-        const { active, color, title } = this.props;
+        const { active, color, title, messages } = this.props;
         const { stable } = this.state;
+
         return (
             <Motion
                 defaultStyle={{
@@ -79,7 +80,7 @@ class OzzBase extends React.Component{
                     }}
                 >
                     <OzzHeader active={active} rest={stable} color={color} title={title}/>
-                    <ChatList color={color}/>
+                    <ChatList color={color} messages={messages}/>
                     <OzzFooter convoId={"123"} token={"123"} color={color} sendMessage={this.props.sendMessage}/>
                 </div>
             }

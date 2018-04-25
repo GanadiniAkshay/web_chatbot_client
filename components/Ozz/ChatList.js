@@ -58,7 +58,11 @@ class ChatList extends React.Component{
     render(){
         const {color} = this.props;
 
-        let messages = this.state.messages.map((message,i)=>{
+        console.log(this.props);
+
+        var messages_data = this.props.messages;
+        
+        let messages = messages_data.map((message,i)=>{
             return(
                 <div 
                     style={(message.sentByUser? ozz_list__item_user:ozz_list__item_bot)}
