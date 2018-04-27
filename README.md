@@ -1,5 +1,8 @@
 ## Webchat Client
 
+### Introduction
+This is an open source web client for chatbots built using Dialogflow and Bot Framework. Support for other platforms will be added soon.
+
 ### Getting Started
 1) Download the source
 
