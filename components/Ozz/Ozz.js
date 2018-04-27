@@ -17,7 +17,8 @@ class Ozz extends React.Component{
         this.state = {
             active: false,
             hasTriggered: false,
-            messages:[]
+            messages:[],
+            backend:this.props.config.backend
         };
 
         this._handleClick = this._handleClick.bind(this);
@@ -49,12 +50,119 @@ class Ozz extends React.Component{
         });
     }
 
+    setCookie(cname, cvalue, time) {
+        var d = new Date();
+        d.setTime(d.getTime() + (time*1000));
+        var expires = "expires="+ d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
     sendMessage(){
+        var backend_type = this.state.backend.type;
+
+        if (backend_type == 'dialogflow_v1'){
+            this.sendDialogFlowV1Message(this.state.backend.token);
+        }else if (backend_type == 'bot_framework'){
+            this.startBotFrameworkConversation(this.state.backend.token);
+        }
+    }
+
+    sendBotFrameworkMessage(conversationID,token,message){
+        var axiosConfig = {headers : { 
+            'Cache-Control': 'no-cache',
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json', 
+        }}
+
+        var body = {
+            "type": "message",
+            "from": {
+                "id": "user1"
+            },
+            "text": message
+        }
+
+        var that = this;
+        axios.post('https://directline.botframework.com/v3/directline/conversations/'+conversationID+'/activities',
+                        body,
+                        axiosConfig)
+                .then(function(response){
+                    var id = response.data.id;
+                    console.log(id);
+                })
+                .catch(function(error){
+                    console.log(error);
+                })
+    }
+
+    startBotFrameworkConversation(token){
+        var message = document.getElementById("message-bar").value;
+
+        var messages_data = this.state.messages;
+    
+        var new_user_message = {
+            message:message,
+            sentByUser:true
+        }
+
+        messages_data.push(new_user_message);
+        this.setState({messages:messages_data});
+
+        var conversationID = this.getCookie("conversationID");
+        
+        if (conversationID != ""){
+            console.log("From Cookie: " + conversationID);
+            this.sendBotFrameworkMessage(conversationID,token,message);
+        }
+        else{
+            var axiosConfig = {headers : { 
+                'Cache-Control': 'no-cache',
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json', 
+            }}
+            var body = {}
+    
+            var that = this;
+    
+            axios.post('https://directline.botframework.com/v3/directline/conversations',
+                        body,
+                        axiosConfig)
+                .then(function(response){
+                    var conversationID = response.data.conversationId;
+                    console.log(conversationID);
+                    that.setCookie('conversationID',conversationID,1500);
+                    this.sendBotFrameworkMessage(conversationID,token,message);
+                })
+                .catch(function(error){
+                    console.log(error);
+                })
+        }
+            
+        document.getElementById("message-bar").value = "";
+    }
+
+    sendDialogFlowV1Message(token){
         var message = document.getElementById("message-bar").value;
         //var api = this.props.config.api;
         var axiosConfig = {headers : { 
                         'Cache-Control': 'no-cache',
-                         'Authorization': 'Bearer 70cbdadb7d184803a88c6f8f56ea5196',
+                         'Authorization': 'Bearer ' + token,
                         'Content-Type': 'application/json', 
                        }}
         var body = { lang: 'en', query:message, sessionId: '12345' }

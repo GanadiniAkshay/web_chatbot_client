@@ -27315,7 +27315,7 @@
 
 	var _DrawButton2 = _interopRequireDefault(_DrawButton);
 
-	var _OzzBase = __webpack_require__(284);
+	var _OzzBase = __webpack_require__(297);
 
 	var _OzzBase2 = _interopRequireDefault(_OzzBase);
 
@@ -27338,7 +27338,8 @@
 	        _this.state = {
 	            active: false,
 	            hasTriggered: false,
-	            messages: []
+	            messages: [],
+	            backend: _this.props.config.backend
 	        };
 
 	        _this._handleClick = _this._handleClick.bind(_this);
@@ -27375,13 +27376,116 @@
 	            });
 	        }
 	    }, {
+	        key: 'setCookie',
+	        value: function setCookie(cname, cvalue, time) {
+	            var d = new Date();
+	            d.setTime(d.getTime() + time * 1000);
+	            var expires = "expires=" + d.toUTCString();
+	            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+	        }
+	    }, {
+	        key: 'getCookie',
+	        value: function getCookie(cname) {
+	            var name = cname + "=";
+	            var decodedCookie = decodeURIComponent(document.cookie);
+	            var ca = decodedCookie.split(';');
+	            for (var i = 0; i < ca.length; i++) {
+	                var c = ca[i];
+	                while (c.charAt(0) == ' ') {
+	                    c = c.substring(1);
+	                }
+	                if (c.indexOf(name) == 0) {
+	                    return c.substring(name.length, c.length);
+	                }
+	            }
+	            return "";
+	        }
+	    }, {
 	        key: 'sendMessage',
 	        value: function sendMessage() {
+	            var backend_type = this.state.backend.type;
+
+	            if (backend_type == 'dialogflow_v1') {
+	                this.sendDialogFlowV1Message(this.state.backend.token);
+	            } else if (backend_type == 'bot_framework') {
+	                this.startBotFrameworkConversation(this.state.backend.token);
+	            }
+	        }
+	    }, {
+	        key: 'sendBotFrameworkMessage',
+	        value: function sendBotFrameworkMessage(conversationID, token, message) {
+	            var axiosConfig = { headers: {
+	                    'Cache-Control': 'no-cache',
+	                    'Authorization': 'Bearer ' + token,
+	                    'Content-Type': 'application/json'
+	                } };
+
+	            var body = {
+	                "type": "message",
+	                "from": {
+	                    "id": "user1"
+	                },
+	                "text": message
+	            };
+
+	            var that = this;
+	            _axios2.default.post('https://directline.botframework.com/v3/directline/conversations/' + conversationID + '/activities', body, axiosConfig).then(function (response) {
+	                var id = response.data.id;
+	                console.log(id);
+	            }).catch(function (error) {
+	                console.log(error);
+	            });
+	        }
+	    }, {
+	        key: 'startBotFrameworkConversation',
+	        value: function startBotFrameworkConversation(token) {
+	            var message = document.getElementById("message-bar").value;
+
+	            var messages_data = this.state.messages;
+
+	            var new_user_message = {
+	                message: message,
+	                sentByUser: true
+	            };
+
+	            messages_data.push(new_user_message);
+	            this.setState({ messages: messages_data });
+
+	            var conversationID = this.getCookie("conversationID");
+
+	            if (conversationID != "") {
+	                console.log("From Cookie: " + conversationID);
+	                this.sendBotFrameworkMessage(conversationID, token, message);
+	            } else {
+	                var axiosConfig = { headers: {
+	                        'Cache-Control': 'no-cache',
+	                        'Authorization': 'Bearer ' + token,
+	                        'Content-Type': 'application/json'
+	                    } };
+	                var body = {};
+
+	                var that = this;
+
+	                _axios2.default.post('https://directline.botframework.com/v3/directline/conversations', body, axiosConfig).then(function (response) {
+	                    var conversationID = response.data.conversationId;
+	                    console.log(conversationID);
+	                    that.setCookie('conversationID', conversationID, 1500);
+	                    this.sendBotFrameworkMessage(conversationID, token, message);
+	                }).catch(function (error) {
+	                    console.log(error);
+	                });
+	            }
+
+	            document.getElementById("message-bar").value = "";
+	        }
+	    }, {
+	        key: 'sendDialogFlowV1Message',
+	        value: function sendDialogFlowV1Message(token) {
 	            var message = document.getElementById("message-bar").value;
 	            //var api = this.props.config.api;
 	            var axiosConfig = { headers: {
 	                    'Cache-Control': 'no-cache',
-	                    'Authorization': 'Bearer 70cbdadb7d184803a88c6f8f56ea5196',
+	                    'Authorization': 'Bearer ' + token,
 	                    'Content-Type': 'application/json'
 	                } };
 	            var body = { lang: 'en', query: message, sessionId: '12345' };
@@ -49933,9 +50037,9 @@
 
 	var _MuiThemeProvider2 = _interopRequireDefault(_MuiThemeProvider);
 
-	var _Card = __webpack_require__(286);
+	var _Card = __webpack_require__(284);
 
-	var _Message = __webpack_require__(298);
+	var _Message = __webpack_require__(296);
 
 	var _Message2 = _interopRequireDefault(_Message);
 
@@ -50075,262 +50179,35 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactMotion = __webpack_require__(174);
-
-	var _classnames = __webpack_require__(218);
-
-	var _classnames2 = _interopRequireDefault(_classnames);
-
-	var _axios = __webpack_require__(191);
-
-	var _axios2 = _interopRequireDefault(_axios);
-
-	var _jquery = __webpack_require__(216);
-
-	var _jquery2 = _interopRequireDefault(_jquery);
-
-	var _OzzHeader = __webpack_require__(285);
-
-	var _OzzHeader2 = _interopRequireDefault(_OzzHeader);
-
-	var _ChatList = __webpack_require__(283);
-
-	var _ChatList2 = _interopRequireDefault(_ChatList);
-
-	var _OzzFooter = __webpack_require__(275);
-
-	var _OzzFooter2 = _interopRequireDefault(_OzzFooter);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var presets = {
-	    default: { stiffness: 330, damping: 20 }
-	};
-
-	var OzzBase = function (_React$Component) {
-	    _inherits(OzzBase, _React$Component);
-
-	    function OzzBase(props) {
-	        _classCallCheck(this, OzzBase);
-
-	        var _this = _possibleConstructorReturn(this, (OzzBase.__proto__ || Object.getPrototypeOf(OzzBase)).call(this, props));
-
-	        _this.state = {
-	            height: 670,
-	            stable: false,
-	            authenticated: false,
-	            currentWindow: 1,
-	            projects: [],
-	            email: ""
-	        };
-
-	        _this._handleRest = _this._handleRest.bind(_this);
-	        return _this;
-	    }
-
-	    _createClass(OzzBase, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            var height = (0, _jquery2.default)(window).height();
-
-	            this.setState({
-	                height: height - height * 0.2
-	            });
-	        }
-	    }, {
-	        key: '_handleRest',
-	        value: function _handleRest() {
-	            this.setState({
-	                stable: true
-	            });
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            var _this2 = this;
-
-	            var _props = this.props,
-	                active = _props.active,
-	                color = _props.color,
-	                title = _props.title,
-	                messages = _props.messages;
-	            var stable = this.state.stable;
-
-
-	            return _react2.default.createElement(
-	                _reactMotion.Motion,
-	                {
-	                    defaultStyle: {
-	                        y: 20,
-	                        opacity: 0
-	                    },
-	                    style: {
-	                        y: (0, _reactMotion.spring)(active ? 0 : 20, presets.default),
-	                        opacity: (0, _reactMotion.spring)(active ? 1 : 0, presets.default)
-	                    },
-	                    onRest: this._handleRest
-	                },
-	                function (interpolatingStyles) {
-	                    return _react2.default.createElement(
-	                        'div',
-	                        {
-	                            style: {
-	                                height: _this2.state.height,
-	                                opacity: interpolatingStyles.opacity,
-	                                transform: 'translateY(' + interpolatingStyles.y + 'px)',
-	                                position: 'fixed',
-	                                right: '20px',
-	                                bottom: '120px',
-	                                background: '#FFF',
-	                                border: '0.5px solid #58488A',
-	                                width: '400px',
-	                                borderRadius: '8px',
-	                                boxDhadow: '0 5px 40px rgba(0, 0, 0, 0.16)',
-	                                overflow: 'hidden',
-	                                display: 'flex',
-	                                zIndex: '100',
-	                                flexDirection: 'column'
-	                            }
-	                        },
-	                        _react2.default.createElement(_OzzHeader2.default, { active: active, rest: stable, color: color, title: title, style: { "postion": "fixed" } }),
-	                        _react2.default.createElement(_ChatList2.default, { color: color, messages: messages, chat: "pop" }),
-	                        _react2.default.createElement(_OzzFooter2.default, { convoId: "123", token: "123", color: color, sendMessage: _this2.props.sendMessage })
-	                    );
-	                }
-	            );
-	        }
-	    }]);
-
-	    return OzzBase;
-	}(_react2.default.Component);
-
-	exports.default = OzzBase;
-
-/***/ }),
-/* 285 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactMotion = __webpack_require__(174);
-
-	var _AppBar = __webpack_require__(256);
-
-	var _AppBar2 = _interopRequireDefault(_AppBar);
-
-	var _RaisedButton = __webpack_require__(219);
-
-	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
-
-	var _IconButton = __webpack_require__(258);
-
-	var _IconButton2 = _interopRequireDefault(_IconButton);
-
-	var _close = __webpack_require__(271);
-
-	var _close2 = _interopRequireDefault(_close);
-
-	var _FlatButton = __webpack_require__(272);
-
-	var _FlatButton2 = _interopRequireDefault(_FlatButton);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var presets = {
-	  default: { stiffness: 330, damping: 20 }
-	};
-
-	var OzzHeader = function OzzHeader(_ref) {
-	  var active = _ref.active,
-	      rest = _ref.rest,
-	      color = _ref.color,
-	      title = _ref.title;
-	  return _react2.default.createElement(
-	    _reactMotion.Motion,
-	    {
-	      defaultStyle: {
-	        y: 40
-	      },
-	      style: {
-	        y: (0, _reactMotion.spring)(active && rest ? 40 : 40, presets.default)
-	      }
-	    },
-	    function (interpolatingStyles) {
-	      return _react2.default.createElement(_AppBar2.default, {
-	        title: _react2.default.createElement(
-	          'span',
-	          null,
-	          title
-	        ),
-	        style: { backgroundColor: color, position: "fixed", top: 0 },
-	        showMenuIconButton: false,
-	        titleStyle: { textAlign: "center" }
-	      });
-	    }
-	  );
-	};
-
-	exports.default = OzzHeader;
-
-/***/ }),
-/* 286 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 	exports.default = exports.CardExpandable = exports.CardActions = exports.CardText = exports.CardMedia = exports.CardTitle = exports.CardHeader = exports.Card = undefined;
 
-	var _Card2 = __webpack_require__(287);
+	var _Card2 = __webpack_require__(285);
 
 	var _Card3 = _interopRequireDefault(_Card2);
 
-	var _CardHeader2 = __webpack_require__(291);
+	var _CardHeader2 = __webpack_require__(289);
 
 	var _CardHeader3 = _interopRequireDefault(_CardHeader2);
 
-	var _CardTitle2 = __webpack_require__(294);
+	var _CardTitle2 = __webpack_require__(292);
 
 	var _CardTitle3 = _interopRequireDefault(_CardTitle2);
 
-	var _CardMedia2 = __webpack_require__(295);
+	var _CardMedia2 = __webpack_require__(293);
 
 	var _CardMedia3 = _interopRequireDefault(_CardMedia2);
 
-	var _CardText2 = __webpack_require__(296);
+	var _CardText2 = __webpack_require__(294);
 
 	var _CardText3 = _interopRequireDefault(_CardText2);
 
-	var _CardActions2 = __webpack_require__(297);
+	var _CardActions2 = __webpack_require__(295);
 
 	var _CardActions3 = _interopRequireDefault(_CardActions2);
 
-	var _CardExpandable2 = __webpack_require__(288);
+	var _CardExpandable2 = __webpack_require__(286);
 
 	var _CardExpandable3 = _interopRequireDefault(_CardExpandable2);
 
@@ -50346,7 +50223,7 @@
 	exports.default = _Card3.default;
 
 /***/ }),
-/* 287 */
+/* 285 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -50399,7 +50276,7 @@
 
 	var _Paper2 = _interopRequireDefault(_Paper);
 
-	var _CardExpandable = __webpack_require__(288);
+	var _CardExpandable = __webpack_require__(286);
 
 	var _CardExpandable2 = _interopRequireDefault(_CardExpandable);
 
@@ -50571,7 +50448,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 288 */
+/* 286 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -50612,11 +50489,11 @@
 
 	var _propTypes2 = _interopRequireDefault(_propTypes);
 
-	var _keyboardArrowUp = __webpack_require__(289);
+	var _keyboardArrowUp = __webpack_require__(287);
 
 	var _keyboardArrowUp2 = _interopRequireDefault(_keyboardArrowUp);
 
-	var _keyboardArrowDown = __webpack_require__(290);
+	var _keyboardArrowDown = __webpack_require__(288);
 
 	var _keyboardArrowDown2 = _interopRequireDefault(_keyboardArrowDown);
 
@@ -50684,7 +50561,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 289 */
+/* 287 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50721,7 +50598,7 @@
 	exports.default = HardwareKeyboardArrowUp;
 
 /***/ }),
-/* 290 */
+/* 288 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50758,7 +50635,7 @@
 	exports.default = HardwareKeyboardArrowDown;
 
 /***/ }),
-/* 291 */
+/* 289 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -50807,7 +50684,7 @@
 
 	var _propTypes2 = _interopRequireDefault(_propTypes);
 
-	var _Avatar = __webpack_require__(292);
+	var _Avatar = __webpack_require__(290);
 
 	var _Avatar2 = _interopRequireDefault(_Avatar);
 
@@ -50994,7 +50871,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 292 */
+/* 290 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51004,7 +50881,7 @@
 	});
 	exports.default = undefined;
 
-	var _Avatar = __webpack_require__(293);
+	var _Avatar = __webpack_require__(291);
 
 	var _Avatar2 = _interopRequireDefault(_Avatar);
 
@@ -51013,7 +50890,7 @@
 	exports.default = _Avatar2.default;
 
 /***/ }),
-/* 293 */
+/* 291 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -51189,7 +51066,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 294 */
+/* 292 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -51373,7 +51250,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 295 */
+/* 293 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -51594,7 +51471,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 296 */
+/* 294 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -51721,7 +51598,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 297 */
+/* 295 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -51853,7 +51730,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 298 */
+/* 296 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51868,7 +51745,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Card = __webpack_require__(286);
+	var _Card = __webpack_require__(284);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -51945,6 +51822,233 @@
 	}(_react2.default.Component);
 
 	exports.default = Message;
+
+/***/ }),
+/* 297 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactMotion = __webpack_require__(174);
+
+	var _classnames = __webpack_require__(218);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	var _axios = __webpack_require__(191);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _jquery = __webpack_require__(216);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	var _OzzHeader = __webpack_require__(298);
+
+	var _OzzHeader2 = _interopRequireDefault(_OzzHeader);
+
+	var _ChatList = __webpack_require__(283);
+
+	var _ChatList2 = _interopRequireDefault(_ChatList);
+
+	var _OzzFooter = __webpack_require__(275);
+
+	var _OzzFooter2 = _interopRequireDefault(_OzzFooter);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var presets = {
+	    default: { stiffness: 330, damping: 20 }
+	};
+
+	var OzzBase = function (_React$Component) {
+	    _inherits(OzzBase, _React$Component);
+
+	    function OzzBase(props) {
+	        _classCallCheck(this, OzzBase);
+
+	        var _this = _possibleConstructorReturn(this, (OzzBase.__proto__ || Object.getPrototypeOf(OzzBase)).call(this, props));
+
+	        _this.state = {
+	            height: 670,
+	            stable: false,
+	            authenticated: false,
+	            currentWindow: 1,
+	            projects: [],
+	            email: ""
+	        };
+
+	        _this._handleRest = _this._handleRest.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(OzzBase, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var height = (0, _jquery2.default)(window).height();
+
+	            this.setState({
+	                height: height - height * 0.2
+	            });
+	        }
+	    }, {
+	        key: '_handleRest',
+	        value: function _handleRest() {
+	            this.setState({
+	                stable: true
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            var _props = this.props,
+	                active = _props.active,
+	                color = _props.color,
+	                title = _props.title,
+	                messages = _props.messages;
+	            var stable = this.state.stable;
+
+
+	            return _react2.default.createElement(
+	                _reactMotion.Motion,
+	                {
+	                    defaultStyle: {
+	                        y: 20,
+	                        opacity: 0
+	                    },
+	                    style: {
+	                        y: (0, _reactMotion.spring)(active ? 0 : 20, presets.default),
+	                        opacity: (0, _reactMotion.spring)(active ? 1 : 0, presets.default)
+	                    },
+	                    onRest: this._handleRest
+	                },
+	                function (interpolatingStyles) {
+	                    return _react2.default.createElement(
+	                        'div',
+	                        {
+	                            style: {
+	                                height: _this2.state.height,
+	                                opacity: interpolatingStyles.opacity,
+	                                transform: 'translateY(' + interpolatingStyles.y + 'px)',
+	                                position: 'fixed',
+	                                right: '20px',
+	                                bottom: '120px',
+	                                background: '#FFF',
+	                                border: '0.5px solid #58488A',
+	                                width: '400px',
+	                                borderRadius: '8px',
+	                                boxDhadow: '0 5px 40px rgba(0, 0, 0, 0.16)',
+	                                overflow: 'hidden',
+	                                display: 'flex',
+	                                zIndex: '100',
+	                                flexDirection: 'column'
+	                            }
+	                        },
+	                        _react2.default.createElement(_OzzHeader2.default, { active: active, rest: stable, color: color, title: title, style: { "postion": "fixed" } }),
+	                        _react2.default.createElement(_ChatList2.default, { color: color, messages: messages, chat: "pop" }),
+	                        _react2.default.createElement(_OzzFooter2.default, { convoId: "123", token: "123", color: color, sendMessage: _this2.props.sendMessage })
+	                    );
+	                }
+	            );
+	        }
+	    }]);
+
+	    return OzzBase;
+	}(_react2.default.Component);
+
+	exports.default = OzzBase;
+
+/***/ }),
+/* 298 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactMotion = __webpack_require__(174);
+
+	var _AppBar = __webpack_require__(256);
+
+	var _AppBar2 = _interopRequireDefault(_AppBar);
+
+	var _RaisedButton = __webpack_require__(219);
+
+	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
+
+	var _IconButton = __webpack_require__(258);
+
+	var _IconButton2 = _interopRequireDefault(_IconButton);
+
+	var _close = __webpack_require__(271);
+
+	var _close2 = _interopRequireDefault(_close);
+
+	var _FlatButton = __webpack_require__(272);
+
+	var _FlatButton2 = _interopRequireDefault(_FlatButton);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var presets = {
+	  default: { stiffness: 330, damping: 20 }
+	};
+
+	var OzzHeader = function OzzHeader(_ref) {
+	  var active = _ref.active,
+	      rest = _ref.rest,
+	      color = _ref.color,
+	      title = _ref.title;
+	  return _react2.default.createElement(
+	    _reactMotion.Motion,
+	    {
+	      defaultStyle: {
+	        y: 40
+	      },
+	      style: {
+	        y: (0, _reactMotion.spring)(active && rest ? 40 : 40, presets.default)
+	      }
+	    },
+	    function (interpolatingStyles) {
+	      return _react2.default.createElement(_AppBar2.default, {
+	        title: _react2.default.createElement(
+	          'span',
+	          null,
+	          title
+	        ),
+	        style: { backgroundColor: color, position: "fixed", top: 0 },
+	        showMenuIconButton: false,
+	        titleStyle: { textAlign: "center" }
+	      });
+	    }
+	  );
+	};
+
+	exports.default = OzzHeader;
 
 /***/ })
 /******/ ]);
