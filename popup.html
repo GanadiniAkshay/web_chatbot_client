@@ -8,16 +8,43 @@
     <body>
         <div class="container">
             <h3>
-                    <a href="../">
+                    <a href="/web_chatbot_client">
                         Web Chatbot Client
                     </a>
             </h3>
-            <h5>Bot Backend: Microsoft Bot Framework</h5>
+            <h5>Bot Backend: Dialogflow V1 Api</h5>
             <h5>Chat Window Style: Popup</h5>
             <!-- Place this tag where you want the button to render. -->
             <a class="github-button" href="https://github.com/GanadiniAkshay/web_chatbot_client" data-icon="octicon-star" data-size="large" aria-label="Star ntkme/github-buttons on GitHub">Star</a>
             <!-- Place this tag where you want the button to render. -->
             <a class="github-button" href="https://github.com/GanadiniAkshay/web_chatbot_client/fork" data-icon="octicon-repo-forked" data-size="large" aria-label="Fork ntkme/github-buttons on GitHub">Fork</a>
+            <div class="row">
+                    <div class="col s6">
+                        <h4>Deployment</h4>
+                        <p>Copy the webchat_client.js file from the dist folder to your static directory and
+                        add the following code</p>
+                        <p><b>Note: Currently it only supports the V1 api of dialogflow. Support for V2 will be added soon.</b></p>
+                        <xmp class="prettyprint"><div id="webchat_client"></div>
+<script type="text/javascript" src="{Path}/webchat_client.js"></script>
+<script type="text/javascript">
+var config = {
+                color:"#4d7e80",
+                title:"Demo Bot",
+                style:1,
+                buttonOpen:"help",
+                backend: {
+                    "type":"dialogflow_v1",
+                    "token":"<your_dialogflow_token>"
+                }
+            }
+$(document).ready(function(){
+    webchat(config);
+})
+</script>
+                        </xmp>
+                        <p>The style parameter can take two options: 0 for popup and 1 for slide</p>
+                    </div>
+            </div>
             <div id="webchat_client"></div>
         </div>
         <script
@@ -33,7 +60,11 @@
                 color:"#4d7e80",
                 title:"Demo Bot",
                 style:0,
-                buttonOpen:"help"
+                buttonOpen:"help",
+                backend: {
+                    "type":"dialogflow_v1",
+                    "token":"70cbdadb7d184803a88c6f8f56ea5196"
+                }
             }
             $(document).ready(function(){
                 webchat(config);

@@ -27412,6 +27412,53 @@
 	            }
 	        }
 	    }, {
+	        key: 'getBotFrameworkResponse',
+	        value: function getBotFrameworkResponse(conversationID, id, token) {
+	            var data = null;
+	            var that = this;
+
+	            var xhr = new XMLHttpRequest();
+	            xhr.withCredentials = false;
+
+	            xhr.addEventListener("readystatechange", function () {
+	                if (this.readyState === 4) {
+	                    var resp = JSON.parse(this.responseText);
+	                    var activities = resp.activities;
+	                    var activity_found = false;
+
+	                    for (var i = 0; i < activities.length; i++) {
+	                        if ('replyToId' in activities[i] && activities[i]['replyToId'] == id) {
+	                            var reply = activities[i]['text'];
+	                            activity_found = true;
+
+	                            var messages_data = that.state.messages;
+	                            var new_bot_message = {
+	                                message: reply,
+	                                sentByUser: false
+	                            };
+	                            messages_data.push(new_bot_message);
+	                            that.setState({ messages: messages_data });
+	                            var list = (0, _jquery2.default)('#ozz-list');
+
+	                            if (list) {
+	                                list.prop('scrollTop', list.prop('scrollHeight') + 1000);
+	                            }
+	                        }
+	                    }
+
+	                    if (!activity_found) {
+	                        setTimeout(that.getBotFrameworkResponse(conversationID, id, token), 1000);
+	                    }
+	                }
+	            });
+
+	            xhr.open("GET", "https://directline.botframework.com/v3/directline/conversations/" + conversationID + "/activities");
+	            xhr.setRequestHeader("Authorization", "Bearer " + token);
+	            xhr.setRequestHeader("Cache-Control", "no-cache");
+
+	            xhr.send(data);
+	        }
+	    }, {
 	        key: 'sendBotFrameworkMessage',
 	        value: function sendBotFrameworkMessage(conversationID, token, message) {
 	            var axiosConfig = { headers: {
@@ -27431,6 +27478,7 @@
 	            var that = this;
 	            _axios2.default.post('https://directline.botframework.com/v3/directline/conversations/' + conversationID + '/activities', body, axiosConfig).then(function (response) {
 	                var id = response.data.id;
+	                setTimeout(that.getBotFrameworkResponse(conversationID, id, token), 1000);
 	                console.log(id);
 	            }).catch(function (error) {
 	                console.log(error);
@@ -27451,6 +27499,12 @@
 	            messages_data.push(new_user_message);
 	            this.setState({ messages: messages_data });
 
+	            var list = (0, _jquery2.default)('#ozz-list');
+
+	            if (list) {
+	                list.prop('scrollTop', list.prop('scrollHeight') + 1000);
+	            }
+
 	            var conversationID = this.getCookie("conversationID");
 
 	            if (conversationID != "") {
@@ -27470,7 +27524,7 @@
 	                    var conversationID = response.data.conversationId;
 	                    console.log(conversationID);
 	                    that.setCookie('conversationID', conversationID, 1500);
-	                    this.sendBotFrameworkMessage(conversationID, token, message);
+	                    that.sendBotFrameworkMessage(conversationID, token, message);
 	                }).catch(function (error) {
 	                    console.log(error);
 	                });
@@ -27499,6 +27553,12 @@
 
 	            messages_data.push(new_user_message);
 	            this.setState({ messages: messages_data });
+
+	            var list = (0, _jquery2.default)('#ozz-list');
+
+	            if (list) {
+	                list.prop('scrollTop', list.prop('scrollHeight') + 1000);
+	            }
 
 	            var that = this;
 

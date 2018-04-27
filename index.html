@@ -51,35 +51,24 @@
                     <div class="row">
                         <div class="col s12">
                             <h4>Configuration</h4>
-                            <p>To change the color, title or style update the <b>webchat</b> method on line 28 in <b>index.html</b></p>
-                            <p>The function signature is </p>
-                                <code class="prettyprint">webchat(color,title,style)</code>
-                            <p>The style parameter can take two options: 0 for popup and 1 for slide</p>
-                            <p><i>Make the changes and reload the page to observe the changes</i></p>
+                            <p>To change the color, title, backend or style update the <b>config</b> object.</p>
+                            <p><i> Template config objects can be found in demo pages</i></p>
                         </div>
                     </div>
 
                     <div class="row">
                             <div class="col s12">
                                 <h4>Deployment</h4>
-                                <p>Copy the webchat_client.js file from the dist folder to your static directory and
-                                add the following code</p>
-                                <xmp class="prettyprint"><div id="webchat_client"></div>
-<script type="text/javascript" 
-  src="{Path}/webchat_client.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-    webchat(color,title,style);
-})
-</script>
-                                </xmp>
-                                <p>The style parameter can take two options: 0 for popup and 1 for slide</p>
+                                <p>The deployment code can be found in the demo pages linked at the top of this page.</p>
                             </div>
                     </div>
                 </div>
                 <div class="col s3 offset-s2" style="height:100%;margin-top:15px">
-                    <img src="./dist/slide.gif" alt="demo of a sliding chatbot client" height="50%",width="80%"/>
-                    <img src="./dist/popup.gif" alt="demo of a popup chatbot client" height="50%",width="80%"/>
+                    <h5>Sliding Window</h5>
+                    <img src="./dist/slide.gif" alt="demo of a sliding chatbot client" height="40%",width="80%"/>
+                    <hr/>
+                    <h5>Popup Window</h5>
+                    <img src="./dist/popup.gif" alt="demo of a popup chatbot client" height="40%",width="80%"/>
                 </div>
             </div>
         </div>
