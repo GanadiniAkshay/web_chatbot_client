@@ -4,67 +4,84 @@
         <title>Webchat | Plugin</title>
         <!-- Compiled and minified CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+        <style>
+            html, body {
+                height: 100%;
+            }
+        </style>
     </head>
     <body>
-        <div class="container">
-            <h3>Web Chatbot Client</h3>
-            <!-- Place this tag where you want the button to render. -->
-            <a class="github-button" href="https://github.com/GanadiniAkshay/web_chatbot_client" data-icon="octicon-star" data-size="large" aria-label="Star ntkme/github-buttons on GitHub">Star</a>
-            <!-- Place this tag where you want the button to render. -->
-            <a class="github-button" href="https://github.com/GanadiniAkshay/web_chatbot_client/fork" data-icon="octicon-repo-forked" data-size="large" aria-label="Fork ntkme/github-buttons on GitHub">Fork</a>
-            <div class="row">
-                <div class="col s6">
-                    <h4>Demos</h4>
-                    <p>Dialogflow + Chat Window Style: <a href="./popup.html">Popup</a></p>
-                    <p>Bot Framework + Chat Window Style: <a href="./slide.html">Slide</a></p>
-                </div>
-            </div>
-            <div class="row">
-                    <div class="col s6">
-                        <h4>Getting Started</h4>
-                        <p>Download the code from <a href="https://github.com/GanadiniAkshay/web_chatbot_client">Github</a></p>
-                        <p>Install node.js from <a href="https://nodejs.org/en/">here</a> if not already installed</p>
-                        <p>Install required npm libraries</p>
-                        <code class="prettyprint">
-                            npm install http-server -g
-                        </code>
-                        <br/>
-                        <code class="prettyprint">
-                                npm install
-                        </code>
-                        <p>Test the client by running the following code on the terminal</p>
-                        <code class="prettyprint">
-                            http-server
-                        </code>
+        <div class="fluid-container" style="height:100%">
+            <div class="row" style="height:100%;overflow: hidden;">
+                <div class="col s6" style="height:100%;overflow: scroll">
+                    <h3 style="text-align: center">Web Chatbot Client</h3>
+                    <!-- Place this tag where you want the button to render. -->
+                    <a class="github-button" href="https://github.com/GanadiniAkshay/web_chatbot_client" data-icon="octicon-star" data-size="large" aria-label="Star ntkme/github-buttons on GitHub">Star</a>
+                    <!-- Place this tag where you want the button to render. -->
+                    <a class="github-button" href="https://github.com/GanadiniAkshay/web_chatbot_client/fork" data-icon="octicon-repo-forked" data-size="large" aria-label="Fork ntkme/github-buttons on GitHub">Fork</a>
+
+                    <div class="row">
+                        <div class="col s6">
+                            <h4>Demos</h4>
+                            <p>Dialogflow + Chat Window Style: <a href="./popup.html">Popup</a></p>
+                            <p>Bot Framework + Chat Window Style: <a href="./slide.html">Slide</a></p>
+                        </div>
                     </div>
-            </div>
-            <div class="row">
-                <div class="col s6">
-                    <h4>Configuration</h4>
-                    <p>To change the color, title or style update the <b>webchat</b> method on line 28 in <b>index.html</b></p>
-                    <p>The function signature is </p>
-                        <code class="prettyprint">webchat(color,title,style)</code>
-                    <p>The style parameter can take two options: 0 for popup and 1 for slide</p>
-                    <p><i>Make the changes and reload the page to observe the changes</i></p>
-                </div>
-            </div>
-            <div class="row">
-                    <div class="col s6">
-                        <h4>Deployment</h4>
-                        <p>Copy the webchat_client.js file from the dist folder to your static directory and
-                        add the following code</p>
-                        <xmp class="prettyprint"><div id="webchat_client"></div>
-<script type="text/javascript" src="{Path}/webchat_client.js"></script>
+                    
+                    <div class="row">
+                            <div class="col s12">
+                                <h4>Getting Started</h4>
+                                <p>Download the code from <a href="https://github.com/GanadiniAkshay/web_chatbot_client">Github</a></p>
+                                <p>Install node.js from <a href="https://nodejs.org/en/">here</a> if not already installed</p>
+                                <p>Install required npm libraries</p>
+                                <code class="prettyprint">
+                                    npm install http-server -g
+                                </code>
+                                <br/>
+                                <code class="prettyprint">
+                                        npm install
+                                </code>
+                                <p>Test the client by running the following code on the terminal</p>
+                                <code class="prettyprint">
+                                    http-server
+                                </code>
+                            </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col s12">
+                            <h4>Configuration</h4>
+                            <p>To change the color, title or style update the <b>webchat</b> method on line 28 in <b>index.html</b></p>
+                            <p>The function signature is </p>
+                                <code class="prettyprint">webchat(color,title,style)</code>
+                            <p>The style parameter can take two options: 0 for popup and 1 for slide</p>
+                            <p><i>Make the changes and reload the page to observe the changes</i></p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                            <div class="col s12">
+                                <h4>Deployment</h4>
+                                <p>Copy the webchat_client.js file from the dist folder to your static directory and
+                                add the following code</p>
+                                <xmp class="prettyprint"><div id="webchat_client"></div>
+<script type="text/javascript" 
+  src="{Path}/webchat_client.js"></script>
 <script type="text/javascript">
-    $(document).ready(function(){
-        webchat(color,title,style);
-    })
+$(document).ready(function(){
+    webchat(color,title,style);
+})
 </script>
-                        </xmp>
-                        <p>The style parameter can take two options: 0 for popup and 1 for slide</p>
+                                </xmp>
+                                <p>The style parameter can take two options: 0 for popup and 1 for slide</p>
+                            </div>
                     </div>
                 </div>
-            <div id="webchat_client"></div>
+                <div class="col s3 offset-s2" style="height:100%;margin-top:15px">
+                    <img src="./dist/slide.gif" alt="demo of a sliding chatbot client" height="50%",width="80%"/>
+                    <img src="./dist/popup.gif" alt="demo of a popup chatbot client" height="50%",width="80%"/>
+                </div>
+            </div>
         </div>
         <script
             src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -73,18 +90,6 @@
         <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
         <!-- Compiled and minified JavaScript -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
-        <script type="text/javascript" src="./dist/webchat_client.js"></script>
-        <script type="text/javascript">
-            var config = {
-                color:"black",
-                title:"Demo Bot",
-                style:1,
-                buttonOpen:"help"
-            }
-            $(document).ready(function(){
-                webchat(config);
-            })
-        </script>
         <!-- Place this tag in your head or just before your close body tag. -->
         <script async defer src="https://buttons.github.io/buttons.js"></script>
     </body>

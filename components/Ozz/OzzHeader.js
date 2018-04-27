@@ -23,7 +23,7 @@ const OzzHeader = ({ active, rest, color, title }) => (
     {interpolatingStyles =>
       <AppBar
         title={<span>{title}</span>}
-        style={{backgroundColor: color}}
+        style={{backgroundColor: color,position:"fixed",top:0}}
         showMenuIconButton={false}
         titleStyle={{textAlign:"center"}}
       />

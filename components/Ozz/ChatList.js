@@ -11,24 +11,6 @@ import Message from './Message';
 import PropTypes from 'prop-types';
 
 
-const ozz_list__item_bot =  {
-    maxWidth:"60%",
-    float: "left",
-    clear: "both",
-    paddingTop:"10px",
-    paddingLeft:"10px",
-    paddingBottom:"5px"
-  }
-  
-const ozz_list__item_user = {
-    maxWidth:"60%",
-    float: "right",
-    clear:"both",
-    paddingTop:"10px",
-    paddingRight:"10px",
-    paddingBottom: "5px"
-  }
-
 class ChatList extends React.Component{
     constructor(){
         super();
@@ -56,11 +38,54 @@ class ChatList extends React.Component{
     }
 
     render(){
-        const {color} = this.props;
+        var list = $('#ozz-list');
 
-        console.log(this.props);
+        if (list){
+            list.prop('scrollTop',(list.prop('scrollHeight')+1000)); 
+        }
+
+        const {color,chat} = this.props;
+
+
+        const pop_style = {
+            height:"81%",
+            marginTop:"16%",
+            overflow:"scroll"
+        }
+
+        const slide_style = {
+            height:"84%",
+            marginTop:"15%",
+            overflow:"scroll"
+        }
+
+        const ozz_list__item_bot =  {
+            maxWidth:"60%",
+            float: "left",
+            clear: "both",
+            paddingTop:"10px",
+            paddingLeft:"10px",
+            paddingBottom:"5px",
+            whiteSpace:"normal",
+            wordWrap:"break-word",
+            display:"inline-block" 
+        }
+          
+        const ozz_list__item_user = {
+            maxWidth:"60%",
+            float: "right",
+            clear:"both",
+            paddingTop:"10px",
+            paddingRight:"10px",
+            paddingBottom: "5px",
+            whiteSpace:"initial",
+            wordWrap:"break-word",
+            display:"inline-block"
+          }
 
         var messages_data = this.props.messages;
+
+        var chat_style = (chat == 'pop'? pop_style:slide_style);
         
         let messages = messages_data.map((message,i)=>{
             return(
@@ -75,11 +100,13 @@ class ChatList extends React.Component{
         
 
         return (
-            <MuiThemeProvider muiTheme={getMuiTheme()}>
-                <div className="ozz-list" style={{"overflow":"scroll"}}>
-                    {messages}
-                </div>
-            </MuiThemeProvider>
+            <div id='ozz-list' style={chat_style}>
+                <MuiThemeProvider muiTheme={getMuiTheme()}>
+                    <div className="ozz-list" style={{"overflow":"scroll"}}>
+                        {messages}
+                    </div>
+                </MuiThemeProvider>
+            </div>
         );
     }
 }

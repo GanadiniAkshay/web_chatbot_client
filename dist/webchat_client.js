@@ -27315,7 +27315,7 @@
 
 	var _DrawButton2 = _interopRequireDefault(_DrawButton);
 
-	var _OzzBase = __webpack_require__(297);
+	var _OzzBase = __webpack_require__(284);
 
 	var _OzzBase2 = _interopRequireDefault(_OzzBase);
 
@@ -27407,12 +27407,17 @@
 	                };
 	                messages_data.push(new_bot_message);
 	                that.setState({ messages: messages_data });
+	                var list = (0, _jquery2.default)('#ozz-list');
+
+	                if (list) {
+	                    list.prop('scrollTop', list.prop('scrollHeight') + 1000);
+	                }
 	            }).catch(function (error) {
 	                console.log(error);
 	            });
 
 	            document.getElementById("message-bar").value = "";
-	            console.log("sent " + message);
+	            // console.log("sent " + message);
 	        }
 	    }, {
 	        key: 'render',
@@ -27426,8 +27431,8 @@
 	                style = _props$config.style,
 	                buttonOpen = _props$config.buttonOpen;
 
+	            // console.log(messages);
 
-	            console.log(messages);
 	            return _react2.default.createElement(
 	                'div',
 	                null,
@@ -27440,7 +27445,7 @@
 	                        onClick: this._handleClick,
 	                        color: color,
 	                        buttonOpen: buttonOpen
-	                    }) : _react2.default.createElement(_DrawButton2.default, { color: color, title: title, sendMessage: this.sendMessage, buttonOpen: buttonOpen })
+	                    }) : _react2.default.createElement(_DrawButton2.default, { color: color, title: title, sendMessage: this.sendMessage, buttonOpen: buttonOpen, messages: messages })
 	                )
 	            );
 	        }
@@ -45319,11 +45324,12 @@
 	                title = _props.title,
 	                color = _props.color,
 	                sendMessage = _props.sendMessage,
-	                buttonOpen = _props.buttonOpen;
+	                buttonOpen = _props.buttonOpen,
+	                messages = _props.messages;
 
 	            return _react2.default.createElement(
 	                'div',
-	                null,
+	                { style: { "overflow": "hidden" } },
 	                _react2.default.createElement(
 	                    _reactMotion.Motion,
 	                    {
@@ -45381,11 +45387,11 @@
 	                            _react2.default.createElement(_close2.default, null)
 	                        ),
 	                        onLeftIconButtonClick: this.handleToggle,
-	                        style: { backgroundColor: color },
+	                        style: { backgroundColor: color, position: "fixed" },
 	                        titleStyle: { textAlign: "center" }
 	                    }),
-	                    _react2.default.createElement(_ChatList2.default, { color: color }),
-	                    _react2.default.createElement(_OzzFooter2.default, { convoId: "123", token: "123", color: color, sendMessage: sendMessage })
+	                    _react2.default.createElement(_ChatList2.default, { messages: messages, color: color, chat: "slide" }),
+	                    _react2.default.createElement(_OzzFooter2.default, { convoId: "123", token: "123", color: color, sendMessage: sendMessage, style: { "position": "fixed" } })
 	                )
 	            );
 	        }
@@ -49927,9 +49933,9 @@
 
 	var _MuiThemeProvider2 = _interopRequireDefault(_MuiThemeProvider);
 
-	var _Card = __webpack_require__(284);
+	var _Card = __webpack_require__(286);
 
-	var _Message = __webpack_require__(296);
+	var _Message = __webpack_require__(298);
 
 	var _Message2 = _interopRequireDefault(_Message);
 
@@ -49944,24 +49950,6 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var ozz_list__item_bot = {
-	    maxWidth: "60%",
-	    float: "left",
-	    clear: "both",
-	    paddingTop: "10px",
-	    paddingLeft: "10px",
-	    paddingBottom: "5px"
-	};
-
-	var ozz_list__item_user = {
-	    maxWidth: "60%",
-	    float: "right",
-	    clear: "both",
-	    paddingTop: "10px",
-	    paddingRight: "10px",
-	    paddingBottom: "5px"
-	};
 
 	var ChatList = function (_React$Component) {
 	    _inherits(ChatList, _React$Component);
@@ -49997,12 +49985,56 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var color = this.props.color;
+	            var list = $('#ozz-list');
+
+	            if (list) {
+	                list.prop('scrollTop', list.prop('scrollHeight') + 1000);
+	            }
+
+	            var _props = this.props,
+	                color = _props.color,
+	                chat = _props.chat;
 
 
-	            console.log(this.props);
+	            var pop_style = {
+	                height: "81%",
+	                marginTop: "16%",
+	                overflow: "scroll"
+	            };
+
+	            var slide_style = {
+	                height: "84%",
+	                marginTop: "15%",
+	                overflow: "scroll"
+	            };
+
+	            var ozz_list__item_bot = {
+	                maxWidth: "60%",
+	                float: "left",
+	                clear: "both",
+	                paddingTop: "10px",
+	                paddingLeft: "10px",
+	                paddingBottom: "5px",
+	                whiteSpace: "normal",
+	                wordWrap: "break-word",
+	                display: "inline-block"
+	            };
+
+	            var ozz_list__item_user = {
+	                maxWidth: "60%",
+	                float: "right",
+	                clear: "both",
+	                paddingTop: "10px",
+	                paddingRight: "10px",
+	                paddingBottom: "5px",
+	                whiteSpace: "initial",
+	                wordWrap: "break-word",
+	                display: "inline-block"
+	            };
 
 	            var messages_data = this.props.messages;
+
+	            var chat_style = chat == 'pop' ? pop_style : slide_style;
 
 	            var messages = messages_data.map(function (message, i) {
 	                return _react2.default.createElement(
@@ -50016,12 +50048,16 @@
 	            });
 
 	            return _react2.default.createElement(
-	                _MuiThemeProvider2.default,
-	                { muiTheme: (0, _getMuiTheme2.default)() },
+	                'div',
+	                { id: 'ozz-list', style: chat_style },
 	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'ozz-list', style: { "overflow": "scroll" } },
-	                    messages
+	                    _MuiThemeProvider2.default,
+	                    { muiTheme: (0, _getMuiTheme2.default)() },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'ozz-list', style: { "overflow": "scroll" } },
+	                        messages
+	                    )
 	                )
 	            );
 	        }
@@ -50039,35 +50075,262 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactMotion = __webpack_require__(174);
+
+	var _classnames = __webpack_require__(218);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	var _axios = __webpack_require__(191);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _jquery = __webpack_require__(216);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	var _OzzHeader = __webpack_require__(285);
+
+	var _OzzHeader2 = _interopRequireDefault(_OzzHeader);
+
+	var _ChatList = __webpack_require__(283);
+
+	var _ChatList2 = _interopRequireDefault(_ChatList);
+
+	var _OzzFooter = __webpack_require__(275);
+
+	var _OzzFooter2 = _interopRequireDefault(_OzzFooter);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var presets = {
+	    default: { stiffness: 330, damping: 20 }
+	};
+
+	var OzzBase = function (_React$Component) {
+	    _inherits(OzzBase, _React$Component);
+
+	    function OzzBase(props) {
+	        _classCallCheck(this, OzzBase);
+
+	        var _this = _possibleConstructorReturn(this, (OzzBase.__proto__ || Object.getPrototypeOf(OzzBase)).call(this, props));
+
+	        _this.state = {
+	            height: 670,
+	            stable: false,
+	            authenticated: false,
+	            currentWindow: 1,
+	            projects: [],
+	            email: ""
+	        };
+
+	        _this._handleRest = _this._handleRest.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(OzzBase, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var height = (0, _jquery2.default)(window).height();
+
+	            this.setState({
+	                height: height - height * 0.2
+	            });
+	        }
+	    }, {
+	        key: '_handleRest',
+	        value: function _handleRest() {
+	            this.setState({
+	                stable: true
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            var _props = this.props,
+	                active = _props.active,
+	                color = _props.color,
+	                title = _props.title,
+	                messages = _props.messages;
+	            var stable = this.state.stable;
+
+
+	            return _react2.default.createElement(
+	                _reactMotion.Motion,
+	                {
+	                    defaultStyle: {
+	                        y: 20,
+	                        opacity: 0
+	                    },
+	                    style: {
+	                        y: (0, _reactMotion.spring)(active ? 0 : 20, presets.default),
+	                        opacity: (0, _reactMotion.spring)(active ? 1 : 0, presets.default)
+	                    },
+	                    onRest: this._handleRest
+	                },
+	                function (interpolatingStyles) {
+	                    return _react2.default.createElement(
+	                        'div',
+	                        {
+	                            style: {
+	                                height: _this2.state.height,
+	                                opacity: interpolatingStyles.opacity,
+	                                transform: 'translateY(' + interpolatingStyles.y + 'px)',
+	                                position: 'fixed',
+	                                right: '20px',
+	                                bottom: '120px',
+	                                background: '#FFF',
+	                                border: '0.5px solid #58488A',
+	                                width: '400px',
+	                                borderRadius: '8px',
+	                                boxDhadow: '0 5px 40px rgba(0, 0, 0, 0.16)',
+	                                overflow: 'hidden',
+	                                display: 'flex',
+	                                zIndex: '100',
+	                                flexDirection: 'column'
+	                            }
+	                        },
+	                        _react2.default.createElement(_OzzHeader2.default, { active: active, rest: stable, color: color, title: title, style: { "postion": "fixed" } }),
+	                        _react2.default.createElement(_ChatList2.default, { color: color, messages: messages, chat: "pop" }),
+	                        _react2.default.createElement(_OzzFooter2.default, { convoId: "123", token: "123", color: color, sendMessage: _this2.props.sendMessage })
+	                    );
+	                }
+	            );
+	        }
+	    }]);
+
+	    return OzzBase;
+	}(_react2.default.Component);
+
+	exports.default = OzzBase;
+
+/***/ }),
+/* 285 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactMotion = __webpack_require__(174);
+
+	var _AppBar = __webpack_require__(256);
+
+	var _AppBar2 = _interopRequireDefault(_AppBar);
+
+	var _RaisedButton = __webpack_require__(219);
+
+	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
+
+	var _IconButton = __webpack_require__(258);
+
+	var _IconButton2 = _interopRequireDefault(_IconButton);
+
+	var _close = __webpack_require__(271);
+
+	var _close2 = _interopRequireDefault(_close);
+
+	var _FlatButton = __webpack_require__(272);
+
+	var _FlatButton2 = _interopRequireDefault(_FlatButton);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var presets = {
+	  default: { stiffness: 330, damping: 20 }
+	};
+
+	var OzzHeader = function OzzHeader(_ref) {
+	  var active = _ref.active,
+	      rest = _ref.rest,
+	      color = _ref.color,
+	      title = _ref.title;
+	  return _react2.default.createElement(
+	    _reactMotion.Motion,
+	    {
+	      defaultStyle: {
+	        y: 40
+	      },
+	      style: {
+	        y: (0, _reactMotion.spring)(active && rest ? 40 : 40, presets.default)
+	      }
+	    },
+	    function (interpolatingStyles) {
+	      return _react2.default.createElement(_AppBar2.default, {
+	        title: _react2.default.createElement(
+	          'span',
+	          null,
+	          title
+	        ),
+	        style: { backgroundColor: color, position: "fixed", top: 0 },
+	        showMenuIconButton: false,
+	        titleStyle: { textAlign: "center" }
+	      });
+	    }
+	  );
+	};
+
+	exports.default = OzzHeader;
+
+/***/ }),
+/* 286 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 	exports.default = exports.CardExpandable = exports.CardActions = exports.CardText = exports.CardMedia = exports.CardTitle = exports.CardHeader = exports.Card = undefined;
 
-	var _Card2 = __webpack_require__(285);
+	var _Card2 = __webpack_require__(287);
 
 	var _Card3 = _interopRequireDefault(_Card2);
 
-	var _CardHeader2 = __webpack_require__(289);
+	var _CardHeader2 = __webpack_require__(291);
 
 	var _CardHeader3 = _interopRequireDefault(_CardHeader2);
 
-	var _CardTitle2 = __webpack_require__(292);
+	var _CardTitle2 = __webpack_require__(294);
 
 	var _CardTitle3 = _interopRequireDefault(_CardTitle2);
 
-	var _CardMedia2 = __webpack_require__(293);
+	var _CardMedia2 = __webpack_require__(295);
 
 	var _CardMedia3 = _interopRequireDefault(_CardMedia2);
 
-	var _CardText2 = __webpack_require__(294);
+	var _CardText2 = __webpack_require__(296);
 
 	var _CardText3 = _interopRequireDefault(_CardText2);
 
-	var _CardActions2 = __webpack_require__(295);
+	var _CardActions2 = __webpack_require__(297);
 
 	var _CardActions3 = _interopRequireDefault(_CardActions2);
 
-	var _CardExpandable2 = __webpack_require__(286);
+	var _CardExpandable2 = __webpack_require__(288);
 
 	var _CardExpandable3 = _interopRequireDefault(_CardExpandable2);
 
@@ -50083,7 +50346,7 @@
 	exports.default = _Card3.default;
 
 /***/ }),
-/* 285 */
+/* 287 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -50136,7 +50399,7 @@
 
 	var _Paper2 = _interopRequireDefault(_Paper);
 
-	var _CardExpandable = __webpack_require__(286);
+	var _CardExpandable = __webpack_require__(288);
 
 	var _CardExpandable2 = _interopRequireDefault(_CardExpandable);
 
@@ -50308,7 +50571,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 286 */
+/* 288 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -50349,11 +50612,11 @@
 
 	var _propTypes2 = _interopRequireDefault(_propTypes);
 
-	var _keyboardArrowUp = __webpack_require__(287);
+	var _keyboardArrowUp = __webpack_require__(289);
 
 	var _keyboardArrowUp2 = _interopRequireDefault(_keyboardArrowUp);
 
-	var _keyboardArrowDown = __webpack_require__(288);
+	var _keyboardArrowDown = __webpack_require__(290);
 
 	var _keyboardArrowDown2 = _interopRequireDefault(_keyboardArrowDown);
 
@@ -50421,7 +50684,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 287 */
+/* 289 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50458,7 +50721,7 @@
 	exports.default = HardwareKeyboardArrowUp;
 
 /***/ }),
-/* 288 */
+/* 290 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50495,7 +50758,7 @@
 	exports.default = HardwareKeyboardArrowDown;
 
 /***/ }),
-/* 289 */
+/* 291 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -50544,7 +50807,7 @@
 
 	var _propTypes2 = _interopRequireDefault(_propTypes);
 
-	var _Avatar = __webpack_require__(290);
+	var _Avatar = __webpack_require__(292);
 
 	var _Avatar2 = _interopRequireDefault(_Avatar);
 
@@ -50731,7 +50994,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 290 */
+/* 292 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50741,7 +51004,7 @@
 	});
 	exports.default = undefined;
 
-	var _Avatar = __webpack_require__(291);
+	var _Avatar = __webpack_require__(293);
 
 	var _Avatar2 = _interopRequireDefault(_Avatar);
 
@@ -50750,7 +51013,7 @@
 	exports.default = _Avatar2.default;
 
 /***/ }),
-/* 291 */
+/* 293 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -50926,7 +51189,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 292 */
+/* 294 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -51110,7 +51373,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 293 */
+/* 295 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -51331,7 +51594,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 294 */
+/* 296 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -51458,7 +51721,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 295 */
+/* 297 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -51590,7 +51853,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 296 */
+/* 298 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51605,7 +51868,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Card = __webpack_require__(284);
+	var _Card = __webpack_require__(286);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -51635,24 +51898,32 @@
 
 	            var borderStyleBot = {
 	                'borderRadius': '10px',
-	                'backgroundColor': '#F8F8F8'
+	                'backgroundColor': '#F8F8F8',
+	                'overflowWrap': 'break-word',
+	                "wordWrap": "break-word"
 	            };
 
 	            var borderStyleUser = {
 	                'borderRadius': '10px',
-	                'backgroundColor': color
+	                'backgroundColor': color,
+	                'overflowWrap': 'break-word',
+	                "wordWrap": "break-word"
 	            };
 
 	            var textUserStyle = {
 	                'color': '#F8F8FF',
 	                'whiteSpace': 'pre',
 	                'paddingTop': '2px',
-	                'paddingBottom': '0px'
+	                'paddingBottom': '0px',
+	                "wordWrap": "break-word",
+	                "overflow": "hidden"
 	            };
 
 	            var textBotStyle = {
 	                'paddingTop': '2px',
-	                'paddingBottom': '0px'
+	                'paddingBottom': '0px',
+	                "wordWrap": "break-word",
+	                "overflow": "wrap"
 	            };
 	            return _react2.default.createElement(
 	                _Card.Card,
@@ -51662,7 +51933,7 @@
 	                    { style: this.message.sentByUser ? textUserStyle : textBotStyle },
 	                    _react2.default.createElement(
 	                        'pre',
-	                        { style: { "marginTop": "5px", "marginBottom": "5px" } },
+	                        { style: { "marginTop": "5px", "marginBottom": "5px", whiteSpace: "pre-wrap", wordWrap: "break-word" } },
 	                        this.message.message
 	                    )
 	                )
@@ -51674,233 +51945,6 @@
 	}(_react2.default.Component);
 
 	exports.default = Message;
-
-/***/ }),
-/* 297 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactMotion = __webpack_require__(174);
-
-	var _classnames = __webpack_require__(218);
-
-	var _classnames2 = _interopRequireDefault(_classnames);
-
-	var _axios = __webpack_require__(191);
-
-	var _axios2 = _interopRequireDefault(_axios);
-
-	var _jquery = __webpack_require__(216);
-
-	var _jquery2 = _interopRequireDefault(_jquery);
-
-	var _OzzHeader = __webpack_require__(298);
-
-	var _OzzHeader2 = _interopRequireDefault(_OzzHeader);
-
-	var _ChatList = __webpack_require__(283);
-
-	var _ChatList2 = _interopRequireDefault(_ChatList);
-
-	var _OzzFooter = __webpack_require__(275);
-
-	var _OzzFooter2 = _interopRequireDefault(_OzzFooter);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var presets = {
-	    default: { stiffness: 330, damping: 20 }
-	};
-
-	var OzzBase = function (_React$Component) {
-	    _inherits(OzzBase, _React$Component);
-
-	    function OzzBase(props) {
-	        _classCallCheck(this, OzzBase);
-
-	        var _this = _possibleConstructorReturn(this, (OzzBase.__proto__ || Object.getPrototypeOf(OzzBase)).call(this, props));
-
-	        _this.state = {
-	            height: 670,
-	            stable: false,
-	            authenticated: false,
-	            currentWindow: 1,
-	            projects: [],
-	            email: ""
-	        };
-
-	        _this._handleRest = _this._handleRest.bind(_this);
-	        return _this;
-	    }
-
-	    _createClass(OzzBase, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            var height = (0, _jquery2.default)(window).height();
-
-	            this.setState({
-	                height: height - height * 0.2
-	            });
-	        }
-	    }, {
-	        key: '_handleRest',
-	        value: function _handleRest() {
-	            this.setState({
-	                stable: true
-	            });
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            var _this2 = this;
-
-	            var _props = this.props,
-	                active = _props.active,
-	                color = _props.color,
-	                title = _props.title,
-	                messages = _props.messages;
-	            var stable = this.state.stable;
-
-
-	            return _react2.default.createElement(
-	                _reactMotion.Motion,
-	                {
-	                    defaultStyle: {
-	                        y: 20,
-	                        opacity: 0
-	                    },
-	                    style: {
-	                        y: (0, _reactMotion.spring)(active ? 0 : 20, presets.default),
-	                        opacity: (0, _reactMotion.spring)(active ? 1 : 0, presets.default)
-	                    },
-	                    onRest: this._handleRest
-	                },
-	                function (interpolatingStyles) {
-	                    return _react2.default.createElement(
-	                        'div',
-	                        {
-	                            style: {
-	                                height: _this2.state.height,
-	                                opacity: interpolatingStyles.opacity,
-	                                transform: 'translateY(' + interpolatingStyles.y + 'px)',
-	                                position: 'fixed',
-	                                right: '20px',
-	                                bottom: '120px',
-	                                background: '#FFF',
-	                                border: '0.5px solid #58488A',
-	                                width: '400px',
-	                                borderRadius: '8px',
-	                                boxDhadow: '0 5px 40px rgba(0, 0, 0, 0.16)',
-	                                overflow: 'hidden',
-	                                display: 'flex',
-	                                zIndex: '100',
-	                                flexDirection: 'column'
-	                            }
-	                        },
-	                        _react2.default.createElement(_OzzHeader2.default, { active: active, rest: stable, color: color, title: title }),
-	                        _react2.default.createElement(_ChatList2.default, { color: color, messages: messages }),
-	                        _react2.default.createElement(_OzzFooter2.default, { convoId: "123", token: "123", color: color, sendMessage: _this2.props.sendMessage })
-	                    );
-	                }
-	            );
-	        }
-	    }]);
-
-	    return OzzBase;
-	}(_react2.default.Component);
-
-	exports.default = OzzBase;
-
-/***/ }),
-/* 298 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactMotion = __webpack_require__(174);
-
-	var _AppBar = __webpack_require__(256);
-
-	var _AppBar2 = _interopRequireDefault(_AppBar);
-
-	var _RaisedButton = __webpack_require__(219);
-
-	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
-
-	var _IconButton = __webpack_require__(258);
-
-	var _IconButton2 = _interopRequireDefault(_IconButton);
-
-	var _close = __webpack_require__(271);
-
-	var _close2 = _interopRequireDefault(_close);
-
-	var _FlatButton = __webpack_require__(272);
-
-	var _FlatButton2 = _interopRequireDefault(_FlatButton);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var presets = {
-	  default: { stiffness: 330, damping: 20 }
-	};
-
-	var OzzHeader = function OzzHeader(_ref) {
-	  var active = _ref.active,
-	      rest = _ref.rest,
-	      color = _ref.color,
-	      title = _ref.title;
-	  return _react2.default.createElement(
-	    _reactMotion.Motion,
-	    {
-	      defaultStyle: {
-	        y: 40
-	      },
-	      style: {
-	        y: (0, _reactMotion.spring)(active && rest ? 40 : 40, presets.default)
-	      }
-	    },
-	    function (interpolatingStyles) {
-	      return _react2.default.createElement(_AppBar2.default, {
-	        title: _react2.default.createElement(
-	          'span',
-	          null,
-	          title
-	        ),
-	        style: { backgroundColor: color },
-	        showMenuIconButton: false,
-	        titleStyle: { textAlign: "center" }
-	      });
-	    }
-	  );
-	};
-
-	exports.default = OzzHeader;
 
 /***/ })
 /******/ ]);

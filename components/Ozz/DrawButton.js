@@ -41,9 +41,9 @@ class DrawButton extends React.Component {
     }
 
     render(){
-        const {title, color, sendMessage, buttonOpen} = this.props;
+        const {title, color, sendMessage, buttonOpen, messages} = this.props;
         return(
-            <div>
+            <div style={{"overflow":"hidden"}}>
                 <Motion
                         defaultStyle={{
                             opacity: 0,
@@ -89,11 +89,12 @@ class DrawButton extends React.Component {
                     title={<span style={styles.title}>{title}</span>}
                     iconElementLeft={<IconButton><NavigationClose /></IconButton>}
                     onLeftIconButtonClick={this.handleToggle}
-                    style={{backgroundColor: color}}
+                    style={{backgroundColor: color,position:"fixed"}}
                     titleStyle={{textAlign:"center"}}
                 />
-                <ChatList color={color}/>
-                <OzzFooter convoId={"123"} token={"123"} color={color} sendMessage={sendMessage}/>
+                <ChatList messages={messages} color={color} chat={"slide"}/>
+            
+                <OzzFooter convoId={"123"} token={"123"} color={color} sendMessage={sendMessage} style={{"position":"fixed"}}/>
                 </Drawer>
             </div>
         )

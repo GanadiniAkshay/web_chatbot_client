@@ -12,29 +12,37 @@ class Message extends React.Component{
 
         const borderStyleBot = {
             'borderRadius':'10px',
-            'backgroundColor':'#F8F8F8'
+            'backgroundColor':'#F8F8F8',
+            'overflowWrap': 'break-word',
+            "wordWrap":"break-word"
         }
 
         const borderStyleUser = {
             'borderRadius':'10px',
-            'backgroundColor':color
+            'backgroundColor':color,
+            'overflowWrap': 'break-word',
+            "wordWrap":"break-word"
         }
 
         const textUserStyle ={
             'color':'#F8F8FF',
             'whiteSpace':'pre',
             'paddingTop':'2px',
-            'paddingBottom':'0px'
+            'paddingBottom':'0px',
+            "wordWrap":"break-word",
+            "overflow":"hidden"
         }
 
         const textBotStyle ={
             'paddingTop':'2px',
-            'paddingBottom':'0px'
+            'paddingBottom':'0px',
+            "wordWrap":"break-word",
+            "overflow":"wrap"
         }
         return(
             <Card style={this.message.sentByUser? borderStyleUser:borderStyleBot}>
                 <CardText style={this.message.sentByUser ? textUserStyle : textBotStyle}>
-                    <pre style={{"marginTop":"5px","marginBottom":"5px"}}>{this.message.message}</pre>
+                    <pre style={{"marginTop":"5px","marginBottom":"5px",whiteSpace:"pre-wrap",wordWrap:"break-word"}}>{this.message.message}</pre>
                 </CardText>
             </Card>
         )

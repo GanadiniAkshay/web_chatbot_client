@@ -79,8 +79,8 @@ class OzzBase extends React.Component{
                         flexDirection: 'column'
                     }}
                 >
-                    <OzzHeader active={active} rest={stable} color={color} title={title}/>
-                    <ChatList color={color} messages={messages}/>
+                    <OzzHeader active={active} rest={stable} color={color} title={title} style={{"postion":"fixed"}}/>
+                    <ChatList color={color} messages={messages} chat={"pop"}/>
                     <OzzFooter convoId={"123"} token={"123"} color={color} sendMessage={this.props.sendMessage}/>
                 </div>
             }

@@ -83,13 +83,18 @@ class Ozz extends React.Component{
                     }
                     messages_data.push(new_bot_message);
                     that.setState({messages:messages_data});
+                    var list = $('#ozz-list');
+
+                    if (list){
+                        list.prop('scrollTop',(list.prop('scrollHeight')+1000)); 
+                    }
                 })
                 .catch(function(error){
                     console.log(error);
                 })
             
         document.getElementById("message-bar").value = "";
-        console.log("sent " + message);
+        // console.log("sent " + message);
     }
 
 
@@ -97,7 +102,7 @@ class Ozz extends React.Component{
         const {active,messages} = this.state;
         const {color, title, style, buttonOpen} = this.props.config;
 
-        console.log(messages);
+        // console.log(messages);
         return(
             <div>
                 <div className="ozz" id="ozz">
@@ -110,7 +115,7 @@ class Ozz extends React.Component{
                         buttonOpen={buttonOpen}
                         />
                         :
-                        <DrawButton color={color} title={title} sendMessage={this.sendMessage} buttonOpen={buttonOpen}/>
+                        <DrawButton color={color} title={title} sendMessage={this.sendMessage} buttonOpen={buttonOpen} messages={messages}/>
                     }
                 </div>
             </div>
