@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Webchat | Plugin</title>
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <h3>
+                    Starfeedx Chatbot
+            </h3>
+            <h5>Chat Window Style: Slide</h5>
+            <div class="row">
+                    <div class="col s6">
+                        <h4>Deployment</h4>
+                        <p>Copy the webchat_client.js file from the dist folder to your static directory and
+                        add the following code</p>
+                        <xmp class="prettyprint"><div id="webchat_client"></div>
+<script type="text/javascript" src="{Path}/webchat_client.js"></script>
+<script type="text/javascript">
+var config = {
+                color:"#4d7e80",
+                title:"Strfeedx",
+                style:1,
+                buttonOpen:"help",
+                backend: {
+                    "type":"dialogflow_v1",
+                    "token":"<your_dialogflow_token>"
+                }
+            }
+$(document).ready(function(){
+    webchat(config);
+})
+</script>
+                        </xmp>
+                        <p>The style parameter can take two options: 0 for popup and 1 for slide</p>
+                    </div>
+            </div>
+            <div id="webchat_client"></div>
+        </div>
+        <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+        <script type="text/javascript" src="./dist/webchat_client.js"></script>
+        <script type="text/javascript">
+            var config = {
+                color:"#4d7e80",
+                title:"Starfeedx",
+                style:1,
+                buttonOpen:"help",
+                backend: {
+                    "type":"dialogflow_v1",
+                    "token":"a401aeb79b534d03bbbea906aeb755d8"
+                }
+            }
+            $(document).ready(function(){
+                webchat(config);
+            })
+        </script>
+        <script>
+            window.fbAsyncInit = function() {
+              FB.init({
+                appId            : '476801882736824',
+                autoLogAppEvents : true,
+                xfbml            : true,
+                version          : 'v3.0'
+              });
+            };
+          
+            (function(d, s, id){
+               var js, fjs = d.getElementsByTagName(s)[0];
+               if (d.getElementById(id)) {return;}
+               js = d.createElement(s); js.id = id;
+               js.src = "https://connect.facebook.net/en_US/sdk.js";
+               fjs.parentNode.insertBefore(js, fjs);
+             }(document, 'script', 'facebook-jssdk'));
+          </script>
+        <!-- Place this tag in your head or just before your close body tag. -->
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
+    </body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Webchat | Plugin</title>
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+    </head>
+    <body>
+        <div class="container">
+            <h3>
+                    PISPL Chatbot
+            </h3>
+            <h5>Chat Window Style: Popup</h5>
+            <div id="webchat_client"></div>
+        </div>
+        <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+        <script type="text/javascript" src="./dist/webchat_client.js"></script>
+        <script type="text/javascript">
+            var config = {
+                color:"#3B5998",
+                title:"PISPL",
+                style:0,
+                buttonOpen:"Chat",
+                backend: {
+                    "type":"dialogflow_v1",
+                    "token":"70cbdadb7d184803a88c6f8f56ea5196"
+                }
+            }
+            $(document).ready(function(){
+                webchat(config);
+            })
+        </script>
+    </body>
+</html>
